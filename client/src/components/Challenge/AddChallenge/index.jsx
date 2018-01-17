@@ -11,7 +11,12 @@ class AddChallenge extends Component {
   state = { 
     title: '',
     content: '',
-    difficulty: null
+    difficulty: null,
+    challenge_id: null,
+    awaitingTestCase: null,
+    testName: '',
+    testInput: '',
+    testOutput: ''
    }
 
   submitChallenge = async (e) => {
@@ -25,13 +30,58 @@ class AddChallenge extends Component {
       user_id: id,
       type: 0
     }
-    const result = await axios.post('http://localhost:3396/api/challenges', body);
-    this.props.history.push('/home');
+
+    try {
+      const result = await axios.post('http://localhost:3396/api/challenges', body);
+      console.log('You made a challenge. Here is your challenge ID: ', result.data.id)
+      this.setState({
+        challenge_id: result.data.id,
+        awaitingTestCase: true
+      })
+    }
+    catch (e) {
+      console.log('Error creating challenge. Error: ', e)
+    }
+  }
+
+  submitTest = async (e) => {
+    e.preventDefault();
+    // create payload, which contains [name, input, output], and challenge id.
+    const {testName, testInput, testOutput} = this.state;
+    const content = [];
+    content.push(testName, testInput, testOutput)
+
+    const payload = {
+      content: content,
+      challenge_id: this.state.challenge_id
+    }
+
+    try {
+      const result = await axios.post('http://localhost:3396/api/testCases', payload);
+      console.log('You added a test! Here is the data back from the server:', result)
+
+      this.setState({
+        awaitingTestCase: false,
+        challenge_id: null
+      })
+
+      this.props.history.push('/home');
+
+    }
+
+    catch(e) {
+      console.log('Error creating a test. Error: ', e)
+    }
   }
 
   handleChallengeInput = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
+  }
+
+  handleTestInput = (event) => {
+    const {name, value} = event.target;
+    this.setState({ [name]: value})
   }
 
   render() {
@@ -65,6 +115,39 @@ class AddChallenge extends Component {
             text="Add Challenge"
             onClick={(e) => this.submitChallenge(e)}
             />
+
+          {this.state.awaitingTestCase ? 
+          <div>
+            <Input
+            name='testName'
+            type='testName'
+            placeholder={'Enter test name'}
+            onChange={this.handleTestInput}
+            />
+          <Input
+            name='testInput'
+            type='testInput'
+            placeholder={'Enter test input'}
+            onChange={this.handleTestInput}
+            />
+          <Input 
+            name='testOutput'
+            type='testOutput'
+            placeholder={'Enter test output'}
+            onChange={this.handleTestInput}
+            />
+
+            <Button
+            backgroundColor="green"
+            color="white"
+            text="Submit static tests."
+            onClick={(e) => this.submitTest(e)}          
+            /> 
+            </div>
+
+            : null}
+          
+
         </form>
       </div>
     );
