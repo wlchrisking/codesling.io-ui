@@ -66,7 +66,8 @@ class AddChallenge extends Component {
     
     const content = this.state.testList;
    
-
+    console.log('this.state.testList', this.state.testList);
+    console.log('content', content);
     const payload = {
       content: content,
       challenge_id: this.state.challenge_id
@@ -184,7 +185,7 @@ class AddChallenge extends Component {
               {this.state.testList.map(test => {
                 return <li>  
                 <div>
-                  <div> Test Name: {test[0]}</div>
+                  <div style={{listStyleType: square}} > Test Name: {test[0]}</div>
                   <div> Test Input: {test[1]}</div>
                   <div> Test Output: {test[2]}</div>
                   </div>
