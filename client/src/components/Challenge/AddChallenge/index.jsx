@@ -68,8 +68,8 @@ class AddChallenge extends Component {
    
     console.log('this.state.testList', this.state.testList);
     console.log('content', content);
-    const {testName, testInput, testOutput} = this.state;
-    content.push(testName, testInput, testOutput)
+    // const {testName, testInput, testOutput} = this.state;
+    // content.push(testName, testInput, testOutput)
 
     const payload = {
       content: content,
