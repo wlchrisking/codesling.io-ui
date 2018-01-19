@@ -185,7 +185,7 @@ class AddChallenge extends Component {
               {this.state.testList.map(test => {
                 return <li>  
                 <div>
-                  <div style={{listStyleType: square}} > Test Name: {test[0]}</div>
+                  <div style={{listStyleType: 'square'}} > Test Name: {test[0]}</div>
                   <div> Test Input: {test[1]}</div>
                   <div> Test Output: {test[2]}</div>
                   </div>
