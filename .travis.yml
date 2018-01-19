@@ -7,5 +7,8 @@ install:
  - yarn setup:server
  - yarn setup:client
 script:
- - yarn build
- - yarn start:server
+ - yarn build & 
+ - sleep 10
+ - yarn start:server &
+ - sleep 10
+

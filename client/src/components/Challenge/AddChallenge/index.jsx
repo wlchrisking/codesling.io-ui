@@ -4,20 +4,24 @@ import axios from 'axios';
 import Input from '../../globals/forms/Input';
 import Button from '../../globals/Button/';
 import Logo from '../../globals/Logo';
+//import List from './testList.jsx'
 
 import './Auth.css';
 
 class AddChallenge extends Component {
-  state = { 
-    title: '',
-    content: '',
-    difficulty: null,
-    challenge_id: null,
-    awaitingTestCase: null,
-    testName: '',
-    testInput: '',
-    testOutput: ''
-   }
+  
+    state = { 
+      title: '',
+      content: '',
+      difficulty: null,
+      challenge_id: null,
+      awaitingTestCase: null,
+      testName: '',
+      testInput: '',
+      testOutput: '',
+      testList: []
+     }
+    
 
   submitChallenge = async (e) => {
     e.preventDefault();
@@ -44,10 +48,27 @@ class AddChallenge extends Component {
     }
   }
 
+  addTest = (e) => {
+    e.preventDefault()
+    const {testName, testInput, testOutput} = this.state;
+    let test = [];
+    test.push(testName, testInput, testOutput)
+    let newStateArr = this.state.testList
+    newStateArr.push(test)
+    console.log('newStateArr', newStateArr)
+    console.log('this.state.testList', this.state.testList)
+    this.setState({testList: newStateArr})
+  }
+
   submitTest = async (e) => {
     e.preventDefault();
+    // create payload, which contains [name, input, output], and challenge id.
+    
+    const content = this.state.testList;
+   
+    console.log('this.state.testList', this.state.testList);
+    console.log('content', content);
     const {testName, testInput, testOutput} = this.state;
-    const content = [];
     content.push(testName, testInput, testOutput)
 
     const payload = {
@@ -92,6 +113,7 @@ class AddChallenge extends Component {
         <Logo
           className="landing-page-logo"
         />
+        
         <form className="auth-form">
           <Input
             name='title'
@@ -119,7 +141,9 @@ class AddChallenge extends Component {
             />
 
           {this.state.awaitingTestCase ? 
-          <div>
+          
+            <div>
+            <div>
             <Input
             name='testName'
             type='testName'
@@ -138,7 +162,19 @@ class AddChallenge extends Component {
             placeholder={'Enter test output'}
             onChange={this.handleTestInput}
             />
-
+        
+            
+            <Button
+            backgroundColor="blue"
+            color="white"
+            text="Add Test to List"
+            onClick={(e) => this.addTest(e)}
+            />
+        
+           
+        
+        
+            <div>
             <Button
             backgroundColor="green"
             color="white"
@@ -146,11 +182,36 @@ class AddChallenge extends Component {
             onClick={(e) => this.submitTest(e)}          
             /> 
             </div>
-
+            </div>
+            <div>
+            { (this.state.testList.length > 0)
+            ?
+            <div>
+            <ul>
+              {this.state.testList.map(test => {
+                return <li>  
+                <div>
+                  <div style={{listStyleType: square}} > Test Name: {test[0]}</div>
+                  <div> Test Input: {test[1]}</div>
+                  <div> Test Output: {test[2]}</div>
+                  </div>
+                  </li>
+              })}
+            </ul>
+          </div>
+          : null
+          
+            }
+         
+          </div>
+          </div>
             : null}
           
 
         </form>
+        
+        
+        
       </div>
     );
   }
