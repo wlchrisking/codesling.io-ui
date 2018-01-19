@@ -46,7 +46,6 @@ class AddChallenge extends Component {
 
   submitTest = async (e) => {
     e.preventDefault();
-    // create payload, which contains [name, input, output], and challenge id.
     const {testName, testInput, testOutput} = this.state;
     const content = [];
     content.push(testName, testInput, testOutput)
@@ -62,11 +61,14 @@ class AddChallenge extends Component {
 
       this.setState({
         awaitingTestCase: false,
-        challenge_id: null
       })
 
-      this.props.history.push('/home');
-
+      this.props.history.push({
+        pathname: `/home`,
+        state: {
+          challenge_id: this.state.challenge_id
+        }
+      });
     }
 
     catch(e) {

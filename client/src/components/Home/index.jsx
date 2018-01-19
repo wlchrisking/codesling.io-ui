@@ -18,23 +18,34 @@ class Home extends Component {
    async componentDidMount() {
     const id = localStorage.getItem('id');
     const { data } = await axios.get(`http://localhost:3396/api/usersChallenges/${id}`)
-    this.setState({ allChallenges: data.rows });
+    this.setState({ allChallenges: data.rows, selectedChallenge: data.rows[0] });
    }
 
   randomSlingId = () => {
     slingId = `${randomstring.generate()}`;
   }
 
-  handleDuelClick = () => {
-    this.randomSlingId();
-    this.props.history.push({
-      pathname: `/${slingId}`,
-      state: {
-        challenge: this.state.selectedChallenge
-      }
-    });
+  handleDuelClick = async () => {
+    try {
+      const data = await axios.get(`http://localhost:3396/api/testCases/${this.state.selectedChallenge.id}`);
+      console.log('result of fetching test cases based on specific challenge id:', data.data.rows)
+
+      this.randomSlingId();
+
+      this.props.history.push({
+        pathname: `/${slingId}`,
+        state: {
+          challenge: this.state.selectedChallenge,
+          testCases: data.data.rows
+        }
+      });
+    }
+
+    catch (e) {
+      console.log('error fetching test cases: ', e)
+    }
   }
-  
+
   handleAddChallengeClick = () => {
     this.props.history.push('/addChallenge');
   }
@@ -42,7 +53,7 @@ class Home extends Component {
   handleChallengeSelect = (e) => {
     e.preventDefault();
     const { value } = e.target;
-    this.setState({ selectedChallenge: value });
+    this.setState({ selectedChallenge: JSON.parse(value) }, ()=>{console.log('Home/Index.jsx - this.state is now: ', this.state)});
   }
 
   render() {
@@ -77,6 +88,13 @@ class Home extends Component {
           color="white"
           text="Duel"
           onClick={() => this.handleDuelClick()}
+        />
+
+        <Button
+          backgroundColor="blue"
+          color="white"
+          text="Log states"
+          onClick={() => console.log('\n\nthis.state in index:', this.state, '\n\nthis.props', this.props, '\n\nthis.props.location.state in index', this.props.location.state)}
         />
       </div>
     );
