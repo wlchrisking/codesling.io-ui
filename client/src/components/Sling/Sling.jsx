@@ -40,7 +40,7 @@ class Sling extends Component {
         ownerText: text,
         challengerText: text,
         challenge
-      }, ()=>{console.log('Sling.jsx on component mounted --> \n\n this.state:', this.state, '\n\nthis.props: ', this.props)});
+      }, ()=>{console.log('Sling.jsx on component mounted --> \n\n this.state:', this.state, '\n\nthis.props: ', this.props, '\n\ntypeofthis.props.location.state.testCases[0].content', typeof this.props.location.state.testCases[0].content)});
     });
 
     socket.on('server.changed', ({ text, email }) => {
