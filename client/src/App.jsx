@@ -20,18 +20,20 @@ class App extends Component {
     return (
       <div>
         <Switch>
-          <Route path='/login' component={Login} />
-          <Route path='/signup' component={Signup} />
-          <Route path='/home' component={(props) => (
+          <Route exact path='/login' component={Login} />
+          <Route exact path='/signup' component={Signup} />
+          <Route exact path='/home' component={(props) => (
             <Protected component={Home} {...props} />
           )}/>
-          <Route path='/addChallenge' component={AddChallenge} />
-          <Route path='/challenge' component={(props) => (
+          <Route exact path='/addChallenge' component={AddChallenge} />
+          <Route exact path='/challenge' component={(props) => (
             <Protected component={Challenge} {...props} />
           )}/>
-          <Route path='/slinger' component={Slinger} />
-          <Route path='/:sling' component={Sling} />
-          <Route path='/' component={LandingPage} />
+          <Route exact path='/slinger' component={Slinger} />
+
+          <Route exact path='/:sling' component={Sling} />
+
+          <Route exact path='/' component={LandingPage} />
         </Switch>
       </div>
     )

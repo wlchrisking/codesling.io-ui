@@ -14,8 +14,8 @@ import 'codemirror/theme/base16-dark.css';
 import './Sling.css';
 
 class Sling extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       id: null,
       ownerText: null,
@@ -27,6 +27,7 @@ class Sling extends Component {
   }
 
   componentDidMount() {
+  
     const { socket, challenge } = this.props;
     const startChall = typeof challenge === 'string' ? JSON.parse(challenge) : {}
     socket.on('connect', () => {
@@ -39,7 +40,7 @@ class Sling extends Component {
         ownerText: text,
         challengerText: text,
         challenge
-      });
+      }, ()=>{console.log('Sling.jsx on component mounted --> \n\n this.state:', this.state, '\n\nthis.props: ', this.props, '\n\ntypeofthis.props.location.state.testCases[0].content', typeof this.props.location.state.testCases[0].content)});
     });
 
     socket.on('server.changed', ({ text, email }) => {
@@ -52,6 +53,8 @@ class Sling extends Component {
 
     socket.on('server.run', ({ stdout, email }) => {
       const ownerEmail = localStorage.getItem('email');
+
+      console.log('i am standard output:', stdout)
       email === ownerEmail ? this.setState({ stdout }) : null;
     });
 
@@ -61,8 +64,12 @@ class Sling extends Component {
   submitCode = () => {
     const { socket } = this.props;
     const { ownerText } = this.state;
+    const testCases = this.props.location.state.testCases;
     const email = localStorage.getItem('email');
-    socket.emit('client.run', { text: ownerText, email });
+
+    // emit to the server when a user wants to run code in editor.
+    
+    socket.emit('client.run', { text: ownerText, email, testCases});
   }
 
   handleChange = throttle((editor, metadata, value) => {
@@ -109,6 +116,7 @@ class Sling extends Component {
             onClick={() => this.submitCode()}
           />
         </div>
+        
         <div className="code2-editor-container">
           <CodeMirror 
             editorDidMount={this.initializeEditor}
