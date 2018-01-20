@@ -44,7 +44,7 @@ class Sling extends Component {
         ownerText: text,
         challengerText: text,
         challenge
-      });
+      }, ()=>{console.log('Sling.jsx on component mounted --> \n\n this.state:', this.state, '\n\nthis.props: ', this.props, '\n\ntypeofthis.props.location.state.testCases[0].content', typeof this.props.location.state.testCases[0].content)});
     });
     
     socket.on('server.changed', ({ text, email }) => {
@@ -62,6 +62,7 @@ class Sling extends Component {
     //when the email on the data matches this users email addy
     socket.on('server.run', ({ stdout, email }) => {
       const ownerEmail = localStorage.getItem('email');
+      console.log('i am standard output:', stdout)
       email === ownerEmail ? this.setState({ stdout }) : null;
     });
     
@@ -71,7 +72,9 @@ class Sling extends Component {
   submitCode = () => {
     const { socket } = this.props;
     const { ownerText } = this.state;
+    const testCases = this.props.location.state.testCases;
     const email = localStorage.getItem('email');
+    // emit to the server when a user wants to run code in editor.
     socket.emit('client.run', { text: ownerText, email });
   }
   
