@@ -50,9 +50,39 @@ class AddChallenge extends Component {
 
   addTest = (e) => {
     e.preventDefault()
-    const {testName, testInput, testOutput} = this.state;
+    let {testName, testInput, testOutput} = this.state;
     let test = [];
-    test.push(testName, testInput, testOutput)
+
+    // if (testInput[0] === '{' && testInput[testInput.length - 1] === '}') {
+
+    //   function strToObj(str){
+    //     var obj = {};
+    //     if(str||typeof str ==='string'){
+    //         var objStr = str.match(/\{(.)+\}/g);
+    //         eval("obj ="+objStr);
+    //     }
+    //     return JSON.stringify(obj)
+    //  }
+
+    //   testInput = strToObj(testInput)
+    // }
+
+    // if (testOutput[0] === '{' && testOutput[testOutput.length - 1] === '}') {
+
+    //   function strToObj(str){
+    //     var obj = {};
+    //     if(str||typeof str ==='string'){
+    //         var objStr = str.match(/\{(.)+\}/g);
+    //         eval("obj ="+objStr);
+    //     }
+    //     return JSON.stringify(obj)
+    //  }
+
+    //   testOutput = strToObj(testOutput)
+      
+    // }
+    
+    test.push(testName, JSON.parse(testInput), JSON.parse(testOutput))
     let newStateArr = this.state.testList
     newStateArr.push(test)
     console.log('newStateArr', newStateArr)
