@@ -11,4 +11,3 @@ script:
  - sleep 10
  - yarn start:server &
  - sleep 10
-
