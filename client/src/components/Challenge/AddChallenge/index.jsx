@@ -68,6 +68,9 @@ class AddChallenge extends Component {
    
     console.log('this.state.testList', this.state.testList);
     console.log('content', content);
+    // const {testName, testInput, testOutput} = this.state;
+    // content.push(testName, testInput, testOutput)
+
     const payload = {
       content: content,
       challenge_id: this.state.challenge_id
@@ -79,11 +82,14 @@ class AddChallenge extends Component {
 
       this.setState({
         awaitingTestCase: false,
-        challenge_id: null
       })
 
-     this.props.history.push('/home');
-
+      this.props.history.push({
+        pathname: `/home`,
+        state: {
+          challenge_id: this.state.challenge_id
+        }
+      });
     }
 
     catch(e) {
